@@ -68,16 +68,16 @@ export const productDetailsSchema = z.object({
 
 export const competitorDetailsSchema = z.object({
     name: z.string().describe('The name of the competitor company'),
-    url: z.string().url().describe('The competitor company URL that is correct and will render in the UI'),
-    meta_ad_library_url: z.string().url().describe('Facebook Ad Library URL for this competitor'),
+    url: z.union([z.string().url(), z.literal('')]).describe('The competitor company URL that is correct and will render in the UI. Use empty string if not available.'),
+    meta_ad_library_url: z.union([z.string().url(), z.literal('')]).describe('Facebook Ad Library URL for this competitor. Use empty string if not available.'),
     short_write_up: z.string().optional().describe('Brief description of the competitor'),
-    logo: z.string().url().optional().describe('URL of the competitor logo')
+    logo: z.union([z.string().url(), z.literal('')]).optional().describe('URL of the competitor logo. Use empty string if not available.')
 });
 
 export const onboardingResponseSchema = z.object({
     company_name: z.string().describe('The official name of the company'),
     company_url: z.string().url().describe('The company website URL'),
-    company_logo: z.string().url().describe('URL of the company logo that is correct and will render in the UI'),
+    company_logo: z.union([z.string().url(), z.literal('')]).describe('URL of the company logo that is correct and will render in the UI. Use empty string if not available.'),
     company_description: z.string().describe('The description of the company'),
     company_theme_color: z.string().describe('Primary theme color of the company (hex code)'),
     competitor_details: z.array(competitorDetailsSchema).describe('Array of competitor information'),
