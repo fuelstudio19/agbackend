@@ -39,7 +39,7 @@
     "express-rate-limit": "^7.2.0",
     "ioredis": "^5.6.1",
     "jsdom": "^26.1.0",
-    "langchain": "^0.3.27",
+    "langchain": "^0.3.36",
     "mime-types": "^3.0.1",
     "node-cache": "^5.1.2",
     "openai": "^4.97.0",
