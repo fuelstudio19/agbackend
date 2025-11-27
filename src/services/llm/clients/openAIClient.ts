@@ -3,6 +3,7 @@
  */
 import { OpenAI } from 'openai';
 import { ChatOpenAI } from '@langchain/openai';
+import { RunnableSequence } from '@langchain/core/runnables';
 import axios from 'axios';
 import { BaseLLMClient } from './baseLLMClient';
 import {
@@ -78,8 +79,8 @@ export class OpenAIClient extends BaseLLMClient {
         { role: 'user', content: prompt }
       ]);
 
-      // Create chain
-      const chain = this.chatClient.pipe(parser);
+      // Create chain using RunnableSequence
+      const chain = RunnableSequence.from([this.chatClient, parser]);
       
       // Invoke the chain
       const response = await chain.invoke(messages);

@@ -2,7 +2,7 @@
  * LangChain Helper Service for template substitution and output parsing
  */
 
-import { PromptTemplate } from '@langchain/core/prompts';
+// PromptTemplate not used in this file, removed unused import
 import { OutputFixingParser } from 'langchain/output_parsers';
 import { z } from 'zod';
 import { 

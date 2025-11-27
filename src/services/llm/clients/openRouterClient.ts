@@ -2,6 +2,7 @@
  * Client for OpenRouter API - provides access to various LLM models via a unified API using Langchain
  */
 import { ChatOpenAI } from '@langchain/openai';
+import { RunnableSequence } from '@langchain/core/runnables';
 import { BaseLLMClient } from './baseLLMClient';
 import {
   ModelConfig,
@@ -69,8 +70,8 @@ export class OpenRouterClient extends BaseLLMClient {
         { role: 'user', content: prompt }
       ]);
 
-      // Create chain
-      const chain = this.client.pipe(parser);
+      // Create chain using RunnableSequence
+      const chain = RunnableSequence.from([this.client, parser]);
       
       // Invoke the chain
       const response = await chain.invoke(messages);
@@ -303,7 +304,7 @@ export class OpenRouterClient extends BaseLLMClient {
       const langchainMessages = this.convertMessages(options.messages);
 
       // Create chain
-      const chain = this.webSearchClient.pipe(parser);
+      const chain = RunnableSequence.from([this.webSearchClient, parser]);
       
       // Invoke the chain
       const response = await chain.invoke(langchainMessages);
@@ -418,7 +419,7 @@ export class OpenRouterClient extends BaseLLMClient {
       const langchainMessages = this.convertMessages([message]);
 
       // Create chain
-      const chain = clientToUse.pipe(parser);
+      const chain = RunnableSequence.from([clientToUse, parser]);
       
       // Invoke the chain
       const response = await chain.invoke(langchainMessages);

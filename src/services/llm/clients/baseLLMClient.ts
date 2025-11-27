@@ -2,10 +2,9 @@
  * Abstract base class for all LLM clients using Langchain
  */
 
-import { BaseLanguageModel } from '@langchain/core/language_models/base';
-import { HumanMessage, SystemMessage, AIMessage, BaseMessage } from '@langchain/core/messages';
+import type { BaseLanguageModel } from '@langchain/core/language_models/base';
+import { HumanMessage, SystemMessage, AIMessage, type BaseMessage } from '@langchain/core/messages';
 import { JsonOutputParser } from '@langchain/core/output_parsers';
-import { PromptTemplate } from '@langchain/core/prompts';
 import { z } from 'zod';
 import {
   ModelConfig,
