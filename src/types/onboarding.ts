@@ -32,18 +32,18 @@ export interface CompetitorDetails {
 export interface OnboardingResponse {
     company_url: string;
     company_name: string;
-    company_logo: string;
+    company_logo?: string;
     company_description: string;
     competitor_details: CompetitorDetails[];
-    company_theme_color: string;
+    company_theme_color?: string;
     meta_ad_dashboard_url?: string;
     employee_count?: string;
     sector?: string;
-    mainJob?: string,
-    differentiation?: string,
-    howItHelps?: string,
-    features?: string,
-    benefits?: string
+    mainJob?: string;
+    differentiation?: string;
+    howItHelps?: string;
+    features?: string;
+    benefits?: string;
 }
 
 export interface ScrapedCompanyData {
@@ -77,18 +77,18 @@ export const competitorDetailsSchema = z.object({
 export const onboardingResponseSchema = z.object({
     company_name: z.string().describe('The official name of the company'),
     company_url: z.string().url().describe('The company website URL'),
-    company_logo: z.union([z.string().url(), z.literal('')]).describe('URL of the company logo that is correct and will render in the UI. Use empty string if not available.'),
+    company_logo: z.union([z.string().url(), z.literal('')]).optional().default('').describe('URL of the company logo. Use empty string if not available.'),
     company_description: z.string().describe('The description of the company'),
-    company_theme_color: z.string().describe('Primary theme color of the company (hex code)'),
+    company_theme_color: z.string().optional().default('').describe('Primary theme color of the company (hex code). Use empty string if not available.'),
     competitor_details: z.array(competitorDetailsSchema).describe('Array of competitor information'),
     meta_ad_dashboard_url: z.string().url().optional().describe('Meta Ad Dashboard URL of the company'),
 
     // New fields
-    mainJob: z.string().describe('Brief description of what the company does'),
-    differentiation: z.string().describe('What makes the company unique from competitors'),
-    howItHelps: z.string().describe("How the company's product/service helps customers"),
-    features: z.string().describe('Key features of the product/service'),
-    benefits: z.string().describe('Main benefits customers get')
+    mainJob: z.string().optional().default('').describe('Brief description of what the company does'),
+    differentiation: z.string().optional().default('').describe('What makes the company unique from competitors'),
+    howItHelps: z.string().optional().default('').describe("How the company's product/service helps customers"),
+    features: z.string().optional().default('').describe('Key features of the product/service'),
+    benefits: z.string().optional().default('').describe('Main benefits customers get')
 
 });
 
