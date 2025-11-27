@@ -1,0 +1,1494 @@
+{
+	"info": {
+		"_postman_id": "{{guid}}",
+		"name": "Adgraam API",
+		"description": "API collection for Adgraam's advertising management platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"example@example.com\",\n    \"password\": \"yourpassword\",\n    \"name\": \"Your Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user with email, password, and name."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"example@example.com\",\n    \"password\": \"yourpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticate a user with email and password. Returns access token."
+					},
+					"response": []
+				},
+				{
+					"name": "Google OAuth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/google?redirectUrl=http://localhost:3000",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"google"
+							],
+							"query": [
+								{
+									"key": "redirectUrl",
+									"value": "http://localhost:3000",
+									"description": "URL to redirect to after successful authentication"
+								}
+							]
+						},
+						"description": "Initiate Google OAuth login flow."
+					},
+					"response": []
+				},
+				{
+					"name": "OAuth Callback",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/callback?code=authorization_code",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"callback"
+							],
+							"query": [
+								{
+									"key": "code",
+									"value": "authorization_code",
+									"description": "Authorization code from OAuth provider"
+								}
+							]
+						},
+						"description": "Handle OAuth callback from Google."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration and login."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						},
+						"description": "Get the authenticated user's profile information."
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints."
+		},
+		{
+			"name": "Onboarding",
+			"item": [
+				{
+					"name": "Analyze Company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company_url\": \"https://example.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/onboarding/analyze",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"onboarding",
+								"analyze"
+							]
+						},
+						"description": "Analyze company data using AI web search without saving to database."
+					},
+					"response": []
+				},
+				{
+					"name": "Save Onboarding Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company_name\": \"Example Company\",\n    \"company_url\": \"https://example.com\",\n    \"short_write_up\": \"A leading company in tech\",\n    \"competitors\": [\n        {\n            \"name\": \"Competitor 1\",\n            \"url\": \"https://competitor1.com\",\n            \"meta_ad_library_url\": \"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=Competitor1\"\n        }\n    ],\n    \"industries\": [\"Technology\", \"Software\"],\n    \"target_audience\": [\"Tech professionals\", \"Developers\"],\n    \"core_products_services\": [\"Software solutions\", \"Consulting\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/onboarding/save",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"onboarding",
+								"save"
+							]
+						},
+						"description": "Save analyzed onboarding data to the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Process Competitor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"url\": \"https://competitor.com\",\n    \"name\": \"Competitor Inc\",\n    \"meta_ad_library_url\": \"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=Competitor%20Inc\",\n    \"short_write_up\": \"A leading company in the tech industry\",\n    \"logo\": \"https://competitor.com/logo.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/onboarding/competitor",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"onboarding",
+								"competitor"
+							]
+						},
+						"description": "Process and save a new competitor."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Onboarding by URL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/onboarding/:companyUrl",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"onboarding",
+								":companyUrl"
+							],
+							"variable": [
+								{
+									"key": "companyUrl",
+									"value": "https%3A%2F%2Fexample.com",
+									"description": "URL-encoded company URL"
+								}
+							]
+						},
+						"description": "Get existing onboarding data for a company URL."
+					},
+					"response": []
+				}
+			],
+			"description": "Company onboarding and competitor analysis endpoints."
+		},
+		{
+			"name": "Meta Ad Scraping",
+			"item": [
+				{
+					"name": "Start Meta Ad Scraping",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"competitor_url\": \"https://example-competitor.com\",\n    \"meta_ad_library_url\": \"https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=Nike\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/scrap/meta-ads/start",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"scrap",
+								"meta-ads",
+								"start"
+							]
+						},
+						"description": "Start scraping Meta ads for a competitor. Returns a run_id for tracking progress."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Meta Ad Scraping Results",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"run_id\": \"abc123-def456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/scrap/meta-ads/result",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"scrap",
+								"meta-ads",
+								"result"
+							]
+						},
+						"description": "Get scraping results by run_id or competitor URL."
+					},
+					"response": []
+				},
+				{
+					"name": "Start Self Ad Scraping",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"meta_ad_dashboard_url\": \"https://www.facebook.com/ads/manager/ads/?act=1234567890\",\n    \"company_url\": \"https://example-company.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/scrap/self-ads/start",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"scrap",
+								"self-ads",
+								"start"
+							]
+						},
+						"description": "Start scraping self ads from Meta Ad Dashboard."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Self Ad Scraping Results",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"run_id\": \"abc123-def456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/scrap/self-ads/result",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"scrap",
+								"self-ads",
+								"result"
+							]
+						},
+						"description": "Get self ad scraping results by run_id or company URL."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Queue Monitoring",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/scrap/queue/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"scrap",
+								"queue",
+								"status"
+							]
+						},
+						"description": "Monitor the scraping queue status and recent jobs."
+					},
+					"response": []
+				}
+			],
+			"description": "Meta Ad Library scraping endpoints for competitors and self ads."
+		},
+		{
+			"name": "Competitor Ad Creatives",
+			"item": [
+				{
+					"name": "List Competitor Ads",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/competitor-ads?limit=50&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"competitor-ads"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "Number of ads to retrieve"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Number of ads to skip"
+								}
+							]
+						},
+						"description": "Get competitor ads for the authenticated user's organization."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Competitor Ads by Page",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/competitor-ads/page/:page_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"competitor-ads",
+								"page",
+								":page_id"
+							],
+							"variable": [
+								{
+									"key": "page_id",
+									"value": "123456789",
+									"description": "Facebook page ID"
+								}
+							]
+						},
+						"description": "Get competitor ads for a specific Facebook page."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Competitor Ad by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/competitor-ads/:ad_archive_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"competitor-ads",
+								":ad_archive_id"
+							],
+							"variable": [
+								{
+									"key": "ad_archive_id",
+									"value": "ad_archive_123",
+									"description": "Ad archive ID"
+								}
+							]
+						},
+						"description": "Get a specific competitor ad by its archive ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Competitor Ad",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/competitor-ads/:ad_archive_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"competitor-ads",
+								":ad_archive_id"
+							],
+							"variable": [
+								{
+									"key": "ad_archive_id",
+									"value": "ad_archive_123",
+									"description": "Ad archive ID"
+								}
+							]
+						},
+						"description": "Delete a specific competitor ad by its archive ID."
+					},
+					"response": []
+				}
+			],
+			"description": "Competitor ad creatives management endpoints."
+		},
+		{
+			"name": "Self Ad Creatives",
+			"item": [
+				{
+					"name": "List Self Ads",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/self-ads?limit=50&offset=0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"self-ads"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "Number of ads to retrieve"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Number of ads to skip"
+								}
+							]
+						},
+						"description": "Get self ads for the authenticated user's organization."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Self Ad by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/self-ads/:ad_archive_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"self-ads",
+								":ad_archive_id"
+							],
+							"variable": [
+								{
+									"key": "ad_archive_id",
+									"value": "ad_archive_123",
+									"description": "Ad archive ID"
+								}
+							]
+						},
+						"description": "Get a specific self ad by its archive ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Self Ad",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/self-ads/:ad_archive_id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"self-ads",
+								":ad_archive_id"
+							],
+							"variable": [
+								{
+									"key": "ad_archive_id",
+									"value": "ad_archive_123",
+									"description": "Ad archive ID"
+								}
+							]
+						},
+						"description": "Delete a specific self ad by its archive ID."
+					},
+					"response": []
+				}
+			],
+			"description": "Self ad creatives management endpoints."
+		},
+		{
+			"name": "Ad Accounts",
+			"item": [
+				{
+					"name": "List Ad Accounts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ad-accounts?refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ad-accounts"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								}
+							]
+						},
+						"description": "Fetches a list of ad accounts associated with the authenticated user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ad Account By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ad-accounts/:accountId?refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ad-accounts",
+								":accountId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account (with or without 'act_' prefix)"
+								}
+							]
+						},
+						"description": "Fetches details for a specific ad account by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ad Account Insights",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ad-accounts/:accountId/insights?date_start=2024-01-01&date_end=2024-01-31&refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ad-accounts",
+								":accountId",
+								"insights"
+							],
+							"query": [
+								{
+									"key": "date_start",
+									"value": "2024-01-01",
+									"description": "Start date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "date_end",
+									"value": "2024-01-31",
+									"description": "End date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								},
+								{
+									"key": "breakdowns",
+									"value": "age,gender",
+									"description": "Comma-separated list of breakdown dimensions",
+									"disabled": true
+								},
+								{
+									"key": "time_increment",
+									"value": "1",
+									"description": "Time increment for data aggregation",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								}
+							]
+						},
+						"description": "Get insights for a specific ad account with optional breakdowns."
+					},
+					"response": []
+				}
+			],
+			"description": "Ad account management endpoints."
+		},
+		{
+			"name": "Campaigns",
+			"item": [
+				{
+					"name": "List Campaigns By Account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/account/:accountId?refresh=false&date_start=2024-01-01&date_end=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"account",
+								":accountId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								},
+								{
+									"key": "date_start",
+									"value": "2024-01-01",
+									"description": "Start date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "date_end",
+									"value": "2024-01-31",
+									"description": "End date for insights in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								}
+							]
+						},
+						"description": "Fetches a list of campaigns for a specified ad account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/account/:accountId/:campaignId?refresh=false&date_start=2024-01-01&date_end=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"account",
+								":accountId",
+								":campaignId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								},
+								{
+									"key": "date_start",
+									"value": "2024-01-01",
+									"description": "Start date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "date_end",
+									"value": "2024-01-31",
+									"description": "End date for insights in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "campaignId",
+									"value": "123456789",
+									"description": "The ID of the campaign"
+								}
+							]
+						},
+						"description": "Fetches details for a specific campaign within a given ad account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign Insights",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/campaigns/account/:accountId/:campaignId/insights?date_start=2024-01-01&date_end=2024-01-31&refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"campaigns",
+								"account",
+								":accountId",
+								":campaignId",
+								"insights"
+							],
+							"query": [
+								{
+									"key": "date_start",
+									"value": "2024-01-01",
+									"description": "Start date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "date_end",
+									"value": "2024-01-31",
+									"description": "End date for insights in YYYY-MM-DD format"
+								},
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								},
+								{
+									"key": "breakdowns",
+									"value": "age,gender",
+									"description": "Comma-separated list of breakdown dimensions",
+									"disabled": true
+								},
+								{
+									"key": "time_increment",
+									"value": "1",
+									"description": "Time increment for data aggregation",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "campaignId",
+									"value": "123456789",
+									"description": "The ID of the campaign"
+								}
+							]
+						},
+						"description": "Get insights for a specific campaign with optional breakdowns."
+					},
+					"response": []
+				}
+			],
+			"description": "Campaign management endpoints."
+		},
+		{
+			"name": "Ad Sets",
+			"item": [
+				{
+					"name": "List Ad Sets By Account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ad-sets/account/:accountId?refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ad-sets",
+								"account",
+								":accountId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								}
+							]
+						},
+						"description": "Fetches all ad sets belonging to a specific ad account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ad Set By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ad-sets/account/:accountId/:adSetId?refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ad-sets",
+								"account",
+								":accountId",
+								":adSetId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Set to true to force refresh data from the API"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "adSetId",
+									"value": "123456789",
+									"description": "The ID of the ad set"
+								}
+							]
+						},
+						"description": "Fetches details for a specific ad set by its ID within the context of an account."
+					},
+					"response": []
+				}
+			],
+			"description": "Ad Set management endpoints."
+		},
+		{
+			"name": "Ads",
+			"item": [
+				{
+					"name": "List Ads By Account",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId?refresh=false&dateStart=2024-01-01&dateStop=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Whether to force refresh from API instead of using cached data"
+								},
+								{
+									"key": "dateStart",
+									"value": "2024-01-01",
+									"description": "Start date for insights data in YYYY-MM-DD format"
+								},
+								{
+									"key": "dateStop",
+									"value": "2024-01-31",
+									"description": "End date for insights data in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								}
+							]
+						},
+						"description": "Fetches ads belonging to a specific ad account."
+					},
+					"response": []
+				},
+				{
+					"name": "List Ads By Ad Set",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId/ad-set/:adSetId?refresh=false&dateStart=2024-01-01&dateStop=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId",
+								"ad-set",
+								":adSetId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Whether to force refresh from API instead of using cached data"
+								},
+								{
+									"key": "dateStart",
+									"value": "2024-01-01",
+									"description": "Start date for insights data in YYYY-MM-DD format"
+								},
+								{
+									"key": "dateStop",
+									"value": "2024-01-31",
+									"description": "End date for insights data in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "adSetId",
+									"value": "123456789",
+									"description": "The ID of the ad set"
+								}
+							]
+						},
+						"description": "Fetches ads belonging to a specific ad set within an account."
+					},
+					"response": []
+				},
+				{
+					"name": "List Ads By Campaign",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId/campaign/:campaignId?refresh=false&dateStart=2024-01-01&dateStop=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId",
+								"campaign",
+								":campaignId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Whether to force refresh from API instead of using cached data"
+								},
+								{
+									"key": "dateStart",
+									"value": "2024-01-01",
+									"description": "Start date for insights data in YYYY-MM-DD format"
+								},
+								{
+									"key": "dateStop",
+									"value": "2024-01-31",
+									"description": "End date for insights data in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "campaignId",
+									"value": "123456789",
+									"description": "The ID of the campaign"
+								}
+							]
+						},
+						"description": "Fetches ads belonging to a specific campaign within an account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ad By ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId/:adId?refresh=false&dateStart=2024-01-01&dateStop=2024-01-31",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId",
+								":adId"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Whether to force refresh from API instead of using cached data"
+								},
+								{
+									"key": "dateStart",
+									"value": "2024-01-01",
+									"description": "Start date for insights data in YYYY-MM-DD format"
+								},
+								{
+									"key": "dateStop",
+									"value": "2024-01-31",
+									"description": "End date for insights data in YYYY-MM-DD format"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "adId",
+									"value": "123456789",
+									"description": "The ID of the ad"
+								}
+							]
+						},
+						"description": "Fetches details for a specific ad within an account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Ad Creative",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId/:adId/creative",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId",
+								":adId",
+								"creative"
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "adId",
+									"value": "123456789",
+									"description": "The ID of the ad"
+								}
+							]
+						},
+						"description": "Fetches the detailed creative information associated with a specific ad within an account."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detailed Ad Insights",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"time_range\": {\n        \"since\": \"2024-01-01\",\n        \"until\": \"2024-01-31\"\n    },\n    \"include_placement_breakdown\": true,\n    \"include_audience_breakdown\": true,\n    \"include_geo_breakdown\": false,\n    \"include_action_breakdown\": false,\n    \"include_device_breakdown\": false,\n    \"include_hourly_breakdown\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/ads/account/:accountId/:adId/insights/detailed?refresh=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ads",
+								"account",
+								":accountId",
+								":adId",
+								"insights",
+								"detailed"
+							],
+							"query": [
+								{
+									"key": "refresh",
+									"value": "false",
+									"description": "Whether to force refresh from API instead of using stored data"
+								}
+							],
+							"variable": [
+								{
+									"key": "accountId",
+									"value": "act_123456789",
+									"description": "The ID of the ad account"
+								},
+								{
+									"key": "adId",
+									"value": "123456789",
+									"description": "The ID of the ad"
+								}
+							]
+						},
+						"description": "Fetches comprehensive performance insights for a specific ad with various breakdown options. Use refresh=true to fetch fresh data from Facebook API, or refresh=false to use stored data."
+					},
+					"response": []
+				}
+			],
+			"description": "Ad management endpoints."
+		},
+		{
+			"name": "Documentation",
+			"item": [
+				{
+					"name": "API Documentation UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/docs",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"docs"
+							]
+						},
+						"description": "Access the Swagger UI documentation for the API."
+					},
+					"response": []
+				},
+				{
+					"name": "Swagger JSON",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/docs/swagger.json",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"docs",
+								"swagger.json"
+							]
+						},
+						"description": "Get the Swagger JSON specification for the API."
+					},
+					"response": []
+				}
+			],
+			"description": "API documentation endpoints."
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	}
+}

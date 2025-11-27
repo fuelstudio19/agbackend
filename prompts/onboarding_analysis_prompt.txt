@@ -1,0 +1,20 @@
+Search the web for current information about the company given and analyze it to provide detailed information in the following JSON format:
+
+
+Important instructions:
+1. Use web search to find current, accurate information about the company, its products, services, and competitors
+2. Search for information about: company products, services, competitors, branding, recent updates
+3. URLs and keys are not getting merged together. Ensure they are in the correct JSON format.
+4. Return ONLY the JSON object, without any Markdown formatting or additional text
+5. All URLs must be absolute and valid
+6. Include 3-5 main products/services if available
+7. Include 3-5 main competitors if available
+8. If any information cannot be found through web search, put empty string there
+9. Never wrap the response in code blocks (no ```json)
+10. Meta Ad Library URLs are properly formatted with encoded company/product names for example: https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q=COMPANY_NAME&search_type=page
+11. Company logo is a URL of a logo image.
+12. Short write-ups are concise but informative
+13. Use web search to ensure the most current and accurate information
+14. For meta_ad_dashboard_url, employee_count, and sector fields, search for and include this information if available, otherwise use empty string 
+
+INPUT data: {company_url}
